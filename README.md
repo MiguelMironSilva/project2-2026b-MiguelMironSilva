@@ -38,6 +38,9 @@ Estudo do projeto de estudo do aluno Gabriel Maroneze (https://github.com/elc109
 
 Principal inspiração: Usar a API TMDB para fazer o fetching dos filmes. Foi feita uma conta no TMDB e requisicionada uma chave de API para uso próprio.
 
+### Dia 14/09/2026:
+Adicionada a espinha dorsal do backend. Foi criado uma versão minimamente viável de uma aplicação em FastAPI, que foi primeiro rodada localmente dentro de um ambiente virtual, usando o servidor web ASGI Uvicorn para testes locais. Após isso, foi feito um deploy de um web service no serviço de hosting Render com uma chave de API da TMDB, que por sua vez também foi testado (https://project2-2026b-miguelmironsilva.onrender.com/), e feitas as configurações básicas para se fazer o diálogo com um frontend futuro através da Fast API, com a adição de configurações, serviço de TMDB e roteador de filmes, e sua testagem.
+
 ## Code pieces
 
 `Versão mínima da interface do FastAPI`:
