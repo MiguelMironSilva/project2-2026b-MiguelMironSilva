@@ -40,6 +40,31 @@ Principal inspiração: Usar a API TMDB para fazer o fetching dos filmes. Foi fe
 
 ## Code pieces
 
+`Versão mínima da interface do FastAPI`:
+
+````
+from fastapi import FastAPI
+
+app = FastAPI(
+    title="Webapp Filmes API",
+    version="0.1.0",
+)
+
+
+@app.get("/")
+def root():
+    return {
+        "message": "API Webapp Filmes está rodando"
+    }
+
+
+@app.get("/health")
+def health():
+    return {
+        "status": "ok"
+    }
+````
+
 ## Fontes
 
 Webapp para busca de filmes - projeto original
