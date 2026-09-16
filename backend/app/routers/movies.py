@@ -1,5 +1,4 @@
 from fastapi import APIRouter, HTTPException
-
 from app.services.tmdb import get_movie, search_movies, get_movie_credits
 
 

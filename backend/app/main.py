@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from app.routers import movies
+from app.routers import movies, auth
+from app.database import client
+from datetime import datetime
+from app.database import db
 
 
 app = FastAPI(
@@ -18,6 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(movies.router)
+app.include_router(auth.router)
 
 
 @app.get("/")
@@ -32,3 +35,48 @@ def health():
     return {
         "status": "ok"
     }
+
+@app.get("/health/db")
+def database_health():
+    try:
+        client.admin.command("ping")
+        return {
+            "status": "ok",
+            "database": "connected",
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "database": "unavailable",
+            "detail": str(exc),
+        }
+
+#@app.post("/test-db")
+#def test_database():
+#    document = {
+#        "message": "MongoDB está funcionando!",
+#        "created_at": datetime.utcnow(),
+#    }
+
+#    result = db.test.insert_one(document)
+
+#    return {
+#        "status": "ok",
+#        "inserted_id": str(result.inserted_id),
+#    }
+
+#@app.get("/test-db")
+#def read_database():
+#    document = db.test.find_one(
+#        sort=[("created_at", -1)]
+#    )
+
+#    if document is None:
+#        return {
+#            "status": "empty"
+#        }
+
+#    document["_id"] = str(document["_id"])
+
+#    return document
+
