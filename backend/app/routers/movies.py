@@ -19,5 +19,5 @@ def search(query: str):
     except Exception as exc:
         raise HTTPException(
             status_code=502,
-            detail="Não foi feito o fetch de filmes do TMDB",
+            detail=f"TMDB error: {exc}",
         ) from exc

@@ -16,5 +16,8 @@ def search_movies(query: str) -> dict:
         timeout=10,
     )
 
+    print("TMDB status:", response.status_code)
+    print("TMDB response:", response.text)
+
     response.raise_for_status()
     return response.json()
