@@ -3,7 +3,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     tmdb_api_key: str
-    print("TMDB key loaded:", bool(settings.tmdb_api_key))
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -12,3 +11,5 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+print("TMDB key loaded:", bool(settings.tmdb_api_key))

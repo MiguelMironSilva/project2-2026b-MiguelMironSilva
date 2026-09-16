@@ -21,3 +21,12 @@ def search(query: str):
             status_code=502,
             detail=f"TMDB error: {exc}",
         ) from exc
+
+def movie_details(tmdb_id: int):
+    try:
+        return get_movie(tmdb_id)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=502,
+            detail=f"TMDB error: {exc}",
+        ) from exc

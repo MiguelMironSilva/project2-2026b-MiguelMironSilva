@@ -11,13 +11,29 @@ def search_movies(query: str) -> dict:
         f"{TMDB_BASE_URL}/search/movie",
         params={
             "query": query,
-            "api_key": settings.tmdb_api_key,
+        },
+        headers={
+            "Authorization": f"Bearer {settings.tmdb_api_key}",
+            "accept": "application/json",
         },
         timeout=10,
     )
 
-    print("TMDB status:", response.status_code)
-    print("TMDB response:", response.text)
+    response.raise_for_status()
+    return response.json()
+
+def get_movie(movie_id: int) -> dict:
+    response = requests.get(
+        f"{TMDB_BASE_URL}/movie/{movie_id}",
+        params={
+            "language": "en-US",
+        },
+        headers={
+            "Authorization": f"Bearer {settings.tmdb_api_key}",
+            "accept": "application/json",
+        },
+        timeout=10,
+    )
 
     response.raise_for_status()
     return response.json()
