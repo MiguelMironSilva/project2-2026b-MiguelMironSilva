@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JioCinema</title>
+    <link rel="stylesheet" href="./style.css">
+    <!-- Font Awesome CDN Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <!-- Header Section Starts Here -->
+    <header>
+        <div class="logo">
+            <img src="./images/JioCinema Logo.png" alt="JioCinema Logo">
+            <p>JioCinema</p>
+        </div>
+        <div class="theme-mode-btns">
+            <i class="fa-solid fa-toggle-on dark-mode"></i>
+            <i class="fa-solid fa-toggle-off light-mode"></i>
+        </div>
+    </header>
+    <!-- Header Section Ends Here -->
+
+    <!-- Input Section Starts Here -->
+    <div class="input-field">
+        <input type="text" placeholder="Enter Movie Name ...">
+        <div class="search-movie-list-container">
+            <!-- 
+            <p>Mohobbatein</p>
+            <p>Dilwale Dulhaniya Le Jaayenge</p>
+            <p>Dil Toh Pagal Hain</p>
+            -->
+        </div>
+    </div>
+    <!-- Input Section Ends Here -->
+
+    <!-- Movie Container Section Starts Here -->
+    <main>
+        <section>
+            <div class="movie-container">
+                <div class="movie-details-container">
+                    <div class="movie-image">
+                        <img src="https://image.tmdb.org/t/p/original/zB7zJQgk4pPoxsPzZP0CqUgHuXN.jpg" alt="Movie Image">
+                    </div>
+                    <div class="movie-details">
+                        <div class="movie-heading">
+                            <h1 class="movie-name"></h1>
+                        </div>
+                        <p class="movie-original-name">Original Title: <span></span></p>
+                        <div class="genres">
+                            <p>Genres: </p>
+                            <ul class="genres-list"></ul>
+                        </div>
+                        <p class="ratings">Rating: <span>7</span></p>
+                        <p class="description"></p>
+                    </div>
+                </div>
+                <div class="cast-details-container">
+                    <h1>Cast</h1>
+                    <div class="cast-details">
+                        <!-- <div class="cast">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Indian_actor_Amitabh_Bachchan.jpg/220px-Indian_actor_Amitabh_Bachchan.jpg">
+                            <p>Amitabh Bachchan</p>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Movie Container Section Ends Here -->
+
+    <!-- Scripts Goes Here -->
+    <script src="./script.js" defer></script>
+</body>
+</html>
