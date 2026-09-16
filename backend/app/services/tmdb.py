@@ -26,7 +26,7 @@ def get_movie(movie_id: int) -> dict:
     response = requests.get(
         f"{TMDB_BASE_URL}/movie/{movie_id}",
         params={
-            "language": "en-US",
+        "language": "en-US"
         },
         headers={
             "Authorization": f"Bearer {settings.tmdb_api_key}",

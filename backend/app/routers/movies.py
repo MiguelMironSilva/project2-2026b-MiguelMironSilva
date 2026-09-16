@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from app.services.tmdb import search_movies
+from app.services.tmdb import get_movie, search_movies
 
 
 router = APIRouter(prefix="/api/movies", tags=["movies"])
@@ -11,7 +11,7 @@ def search(query: str):
     if not query.strip():
         raise HTTPException(
             status_code=400,
-            detail="Consulta não pode ser vazia",
+            detail="Search query cannot be empty",
         )
 
     try:
@@ -22,6 +22,7 @@ def search(query: str):
             detail=f"TMDB error: {exc}",
         ) from exc
 
+@router.get("/{tmdb_id}")
 def movie_details(tmdb_id: int):
     try:
         return get_movie(tmdb_id)
