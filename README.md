@@ -5,8 +5,8 @@
 ## Acesso
 
 ## Desenvolvedor(a)
-Miguel Miron Silva
-Ciência da Computação, Universidade Federal de Santa Maria
+- Miguel Miron Silva
+- Ciência da Computação, Universidade Federal de Santa Maria
 
 ## Proposta
 Projeto de implementação de site interativo, com foco na implementação do backend, sobre pesquisa e avaliação de filmes, como parte da disciplina de Desenvolvimento de Software para Web (ELC1090), ministrada pela dra. Andrea Schwertner Charão (andrea@inf.ufsm.br), na Universidade Federal de Santa Maria (UFSM). Cada usuário poderá criar sua própria conta, fazer login e ter acesso somente aos filmes favoritos e assistidos. O sistema deverá manter as informações de cada conta, incluindo seus filmes favoritados e assistidos. Ao fazer login novamente, o usuário deverá encontrar seus filmes exatamente como os encontrou.
