@@ -236,6 +236,7 @@ header {
 .user-movie-controls button:hover,
 .user-movie-controls select:hover {
     border-color: var(--primary-text-color);
+    color: var(--secondary-text-color);
 }
 
 .user-movie-controls button[aria-pressed="true"] {
@@ -255,133 +256,13 @@ header {
 }
 
 .user-movie-controls select option {
-    background-color: var(--movie-input-bg-color);
+    background-color: var(--movie-search-bg-color);
     color: var(--secondary-text-color);
 }
 
 /* User Movie Controls Ends Here */
 
-
-/* Responsive Design - Media Query */
-
-@media screen and (max-width:1024px) {
-    /* Movie Container Starts Here */
-    .movie-details-container .movie-image img {
-        height: 450px;
-    }
-
-    .movie-details-container .movie-details .movie-heading {
-        font-size: 1.5rem;
-    }
-
-    .movie-details-container .movie-details .movie-original-name,
-    .movie-details-container .movie-details .movie-original-name span,
-    .movie-details-container .movie-details .genres,
-    .movie-details-container .movie-details .ratings,
-    .movie-details-container .movie-details .description,
-    .movie-container .cast-details-container h1,
-    .cast-details-container .cast-details .cast p {
-        font-size: 1rem;
-    }
-
-    .movie-container .cast-details-container h1 {
-        font-size: 2.3rem;
-    }
-    
-    .cast-details-container .cast-details {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
-
-    .cast-details-container .cast-details .cast img {
-        height: 220px;
-    }
-    /* Movie Container Ends Here */
-}
-
-@media screen and (max-width:768px) {
-    /* Header Section Starts Here */
-    header .logo img {
-        height: 50px;
-    }
-
-    header .logo p {
-        font-size: 2rem;
-    }
-
-    header .theme-mode-btns i {
-        font-size: 1.8rem;
-    }
-    /* Header Section Ends Here */
-
-    /* Movie Container Starts Here */
-    .movie-details-container {
-        flex-direction: column;
-    }
-
-    .movie-details-container .movie-image {
-        justify-content: center;
-    }
-
-    .movie-details-container .movie-image img {
-        height: 500px;
-        width: 100%;
-    }
-
-    .movie-details-container .movie-details {
-        margin: 20px 0;
-    }
-
-    .movie-details-container .movie-details .movie-heading {
-        font-size: 2rem;
-    }
-
-    .movie-details-container .movie-details .movie-original-name,
-    .movie-details-container .movie-details .movie-original-name span,
-    .movie-details-container .movie-details .genres,
-    .movie-details-container .movie-details .ratings,
-    .movie-details-container .movie-details .description {
-        font-size: 1.2rem;
-    }
-
-    .cast-details-container .cast-details {
-        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    }
-
-    .cast-details-container .cast-details .cast img {
-        height: 200px;
-    }
-
-    .cast-details-container .cast-details .cast p {
-        font-size: .9rem;
-    }
-    /* Movie Container Ends Here */
-}
-
-@media screen and (max-width:576px) {
-    /* Header Section Starts Here */
-    header .logo {
-        justify-content: flex-start;
-        padding: 15px 15px;
-    }
-    header .logo img {
-        height: 35px;
-    }
-
-    header .logo p {
-        font-size: 1.4rem;
-    }
-
-    header .theme-mode-btns {
-        top: 20px;
-        right: 15px;
-    }
-
-    header .theme-mode-btns i {
-        font-size: 1.2rem;
-    }
-    /* Header Section Ends Here */
-
-    /* Account Section Starts Here */
+/* Account Section Starts Here */
 
 .header-controls {
     position: absolute;
@@ -492,7 +373,7 @@ header {
     font-size: 1rem;
     border: 1px solid var(--primary-border-color);
     outline-color: var(--primary-border-color);
-    background-color: var(--movie-input-bg-color);
+    background-color: var(--movie-search-bg-color);
     color: var(--secondary-text-color);
 }
 
@@ -505,7 +386,144 @@ header {
 
 /* Account Section Ends Here */
 
+
+/* Responsive Design - Media Query */
+
+@media screen and (max-width:1024px) {
+    /* Movie Container Starts Here */
+    .movie-details-container .movie-image img {
+        height: 450px;
+    }
+
+    .movie-details-container .movie-details .movie-heading {
+        font-size: 1.5rem;
+    }
+
+    .movie-details-container .movie-details .movie-original-name,
+    .movie-details-container .movie-details .movie-original-name span,
+    .movie-details-container .movie-details .genres,
+    .movie-details-container .movie-details .ratings,
+    .movie-details-container .movie-details .description,
+    .movie-container .cast-details-container h1,
+    .cast-details-container .cast-details .cast p {
+        font-size: 1rem;
+    }
+
+    .movie-container .cast-details-container h1 {
+        font-size: 2.3rem;
+    }
+    
+    .cast-details-container .cast-details {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .cast-details-container .cast-details .cast img {
+        height: 220px;
+    }
+    /* Movie Container Ends Here */
+}
+
+@media screen and (max-width:768px) {
+    /* Header Section Starts Here */
+    header .logo img {
+        height: 50px;
+    }
+
+    header .logo p {
+        font-size: 2rem;
+    }
+
+    header .theme-mode-btns i {
+        font-size: 1.8rem;
+    }
+    /* Header Section Ends Here */
+
+    /* Movie Container Starts Here */
+    .movie-details-container {
+        flex-direction: column;
+    }
+
+    .movie-details-container .movie-image {
+        justify-content: center;
+    }
+
+    .movie-details-container .movie-image img {
+        height: 500px;
+        width: 100%;
+    }
+
+    .movie-details-container .movie-details {
+        margin: 20px 0;
+    }
+
+    .movie-details-container .movie-details .movie-heading {
+        font-size: 2rem;
+    }
+
+    .movie-details-container .movie-details .movie-original-name,
+    .movie-details-container .movie-details .movie-original-name span,
+    .movie-details-container .movie-details .genres,
+    .movie-details-container .movie-details .ratings,
+    .movie-details-container .movie-details .description {
+        font-size: 1.2rem;
+    }
+
+    .cast-details-container .cast-details {
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    }
+
+    .cast-details-container .cast-details .cast img {
+        height: 200px;
+    }
+
+    .cast-details-container .cast-details .cast p {
+        font-size: .9rem;
+    }
+    /* Movie Container Ends Here */
+}
+
+@media screen and (max-width:576px) {
+
+    /* Header Section Starts Here */
+
+    header .logo {
+        justify-content: flex-start;
+        padding: 15px 15px;
+    }
+
+    header .logo img {
+        height: 35px;
+    }
+
+    header .logo p {
+        font-size: 1.4rem;
+    }
+
+    header .theme-mode-btns i {
+        font-size: 1.2rem;
+    }
+
+    .header-controls {
+        top: 20px;
+        right: 15px;
+        column-gap: 10px;
+    }
+
+    .account-controls button,
+    .auth-panel button {
+        padding: 7px 10px;
+        font-size: 0.9rem;
+    }
+
+    #username-display {
+        font-size: 0.9rem;
+    }
+
+    /* Header Section Ends Here */
+
+
     /* Input Section Starts Here */
+
     .input-field input {
         width: 280px;
     }
@@ -517,9 +535,12 @@ header {
     .input-field .search-movie-list-container {
         width: 325px;
     }
+
     /* Input Section Ends Here */
 
+
     /* Movie Container Starts Here */
+
     .movie-container {
         padding: 10px 10px;
     }
@@ -531,7 +552,7 @@ header {
 
     .movie-details-container .movie-details .movie-heading {
         font-size: 1.2rem;
-    }    
+    }
 
     .movie-details-container .movie-details .movie-original-name,
     .movie-details-container .movie-details .movie-original-name span,
@@ -542,11 +563,10 @@ header {
     }
 
     .movie-container .cast-details-container {
-        margin: 0px 0;
+        margin: 0;
     }
 
     .cast-details-container .cast-details {
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         place-items: center;
     }
@@ -556,21 +576,19 @@ header {
     }
 
     .cast-details-container .cast-details .cast p {
-        font-size: .8rem;
-    }
-    /* Movie Container Ends Here */
-}
-
-@media screen and (max-width:450px) {
-    /* Movie Container Starts Here */
-    .movie-details-container .movie-details .ratings,
-    .cast-details-container .cast-details {
-        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        font-size: 0.8rem;
     }
 
-    .cast-details-container .cast-details .cast img {
-        height: 230px;
+    .user-movie-controls {
+        justify-content: center;
     }
+
+    .user-movie-controls button,
+    .user-movie-controls select {
+        font-size: 0.9rem;
+        padding: 8px 10px;
+    }
+
     /* Movie Container Ends Here */
 }
 
