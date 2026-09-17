@@ -54,7 +54,7 @@ def get_my_movie_state(
     response_model=MovieStateResponse,
 )
 def update_my_movie_state(
-    tmdb_id: int,
+    tmdb_id: str,
     update: MovieStateUpdate,
     current_user: Annotated[dict, Depends(get_current_user)],
 ):

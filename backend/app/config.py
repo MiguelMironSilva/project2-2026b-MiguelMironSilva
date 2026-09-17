@@ -15,5 +15,3 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
-
-print("TMDB key loaded:", bool(settings.tmdb_api_key))

@@ -4,7 +4,6 @@ from bson import ObjectId
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
-
 from app.config import settings
 from app.database import users_collection
 
@@ -35,8 +34,13 @@ def get_current_user(
         if user_id is None:
             raise credentials_exception
 
+        try:
+            user_object_id = ObjectId(user_id)
+        except (InvalidId, TypeError):
+            raise credentials_exception
+
         user = users_collection.find_one(
-            {"_id": ObjectId(user_id)}
+            {"_id": user_object_id}
         )
 
         if user is None:
@@ -44,5 +48,5 @@ def get_current_user(
 
         return user
 
-    except (InvalidTokenError, ValueError):
+    except InvalidTokenError:
         raise credentials_exception

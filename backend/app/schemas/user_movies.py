@@ -14,7 +14,7 @@ class MovieStateUpdate(BaseModel):
 
 
 class MovieStateResponse(BaseModel):
-    tmdb_id: int
+    tmdb_id: str
     favorite: bool
     watched: bool
     rating: Optional[int] = None

@@ -14,7 +14,7 @@ def get_movie_state(user_id: str, tmdb_id: int):
 
 def upsert_movie_state(
     user_id: str,
-    tmdb_id: int,
+    tmdb_id: str,
     favorite: bool | None = None,
     watched: bool | None = None,
     rating: int | None = None,

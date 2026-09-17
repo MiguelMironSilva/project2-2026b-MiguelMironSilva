@@ -2,8 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import movies, auth, user_movies
 from app.database import client
-from datetime import datetime
-from app.database import db
 
 
 app = FastAPI(
