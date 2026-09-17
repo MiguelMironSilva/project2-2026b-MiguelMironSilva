@@ -52,6 +52,18 @@ const registerPasswordInput = document.querySelector(
 const loginMessage = document.querySelector('#login-message');
 const registerMessage = document.querySelector('#register-message');
 
+const favoriteBtn = document.querySelector('#favorite-btn');
+const watchedBtn = document.querySelector('#watched-btn');
+const userRating = document.querySelector('#user-rating');
+
+let currentMovieId = null;
+
+let currentMovieState = {
+    favorite: false,
+    watched: false,
+    rating: null,
+};
+
 // ============================================================
 // AUTENTICAÇÃO
 // ============================================================
@@ -103,22 +115,27 @@ registerMessage.textContent = '';
 };
 
 const updateAuthenticationUI = (user) => {
-if (user) {
-loginBtn.style.display = 'none';
-userControls.style.display = 'flex';
+    if (user) {
+        loginBtn.style.display = 'none';
+        userControls.style.display = 'flex';
 
+        usernameDisplay.textContent = user.username;
 
-    usernameDisplay.textContent = user.username;
+        hideAuthPanel();
 
-    hideAuthPanel();
-} else {
-    loginBtn.style.display = 'block';
-    userControls.style.display = 'none';
+        if (currentMovieId !== null) {
+            loadMovieState(currentMovieId);
+        }
 
-    usernameDisplay.textContent = '';
-}
+    } else {
+        loginBtn.style.display = 'block';
+        userControls.style.display = 'none';
 
+        usernameDisplay.textContent = '';
 
+        resetMovieState();
+        setMovieControlsEnabled(false);
+    }
 };
 
 const fetchCurrentUser = async () => {
@@ -160,6 +177,164 @@ try {
     updateAuthenticationUI(null);
 }
 
+};
+
+const resetMovieState = () => {
+    currentMovieState = {
+        favorite: false,
+        watched: false,
+        rating: null,
+    };
+
+    favoriteBtn.textContent = 'Favorite';
+    favoriteBtn.setAttribute('aria-pressed', 'false');
+
+    watchedBtn.textContent = 'Watched';
+    watchedBtn.setAttribute('aria-pressed', 'false');
+
+    userRating.value = '';
+};
+
+
+const updateMovieStateUI = () => {
+    favoriteBtn.textContent = currentMovieState.favorite
+        ? 'Favorited'
+        : 'Favorite';
+
+    favoriteBtn.setAttribute(
+        'aria-pressed',
+        String(currentMovieState.favorite)
+    );
+
+    watchedBtn.textContent = currentMovieState.watched
+        ? 'Watched ✓'
+        : 'Watched';
+
+    watchedBtn.setAttribute(
+        'aria-pressed',
+        String(currentMovieState.watched)
+    );
+
+    userRating.value = currentMovieState.rating === null
+        ? ''
+        : String(currentMovieState.rating);
+};
+
+
+const setMovieControlsEnabled = (enabled) => {
+    favoriteBtn.disabled = !enabled;
+    watchedBtn.disabled = !enabled;
+    userRating.disabled = !enabled;
+};
+
+
+const loadMovieState = async (movieId) => {
+    const token = getToken();
+
+    if (!token) {
+        resetMovieState();
+        setMovieControlsEnabled(false);
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/my-movies/${movieId}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (response.status === 401) {
+            removeToken();
+            updateAuthenticationUI(null);
+            resetMovieState();
+            setMovieControlsEnabled(false);
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                `Backend returned ${response.status}`
+            );
+        }
+
+        const state = await response.json();
+
+        currentMovieState = {
+            favorite: state.favorite,
+            watched: state.watched,
+            rating: state.rating,
+        };
+
+        updateMovieStateUI();
+        setMovieControlsEnabled(true);
+
+    } catch (error) {
+        console.error(
+            'Failed to fetch movie state:',
+            error
+        );
+
+        resetMovieState();
+        setMovieControlsEnabled(false);
+    }
+};
+
+
+const saveMovieState = async (changes) => {
+    const token = getToken();
+
+    if (!token || currentMovieId === null) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/my-movies/${currentMovieId}`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(changes),
+            }
+        );
+
+        if (response.status === 401) {
+            removeToken();
+            updateAuthenticationUI(null);
+            resetMovieState();
+            setMovieControlsEnabled(false);
+            return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail ||
+                `Backend returned ${response.status}`
+            );
+        }
+
+        currentMovieState = {
+            favorite: data.favorite,
+            watched: data.watched,
+            rating: data.rating,
+        };
+
+        updateMovieStateUI();
+
+    } catch (error) {
+        console.error(
+            'Failed to save movie state:',
+            error
+        );
+    }
 };
 
 const login = async (event) => {
@@ -430,17 +605,13 @@ const response = await fetch(
 
         movieImageElement.src = movieImageURL;
 
-        movieNameElement.textContent =
-            `${movieName} ${releaseYear}`;
+        movieNameElement.textContent = `${movieName} ${releaseYear}`;
 
-        originalTitleElement.textContent =
-            originalTitle;
+        originalTitleElement.textContent = originalTitle;
 
-        ratingsElement.textContent =
-            ratings;
+        ratingsElement.textContent = ratings;
 
-        movieDescriptionElement.textContent =
-            movieDescription;
+        movieDescriptionElement.textContent = movieDescription;
 
         clearGenresList(genresList);
 
@@ -688,11 +859,47 @@ logoutBtn.addEventListener(
 logout
 );
 
+favoriteBtn.addEventListener(
+    'click',
+    () => {
+        saveMovieState({
+            favorite: !currentMovieState.favorite,
+        });
+    }
+);
+
+
+watchedBtn.addEventListener(
+    'click',
+    () => {
+        saveMovieState({
+            watched: !currentMovieState.watched,
+        });
+    }
+);
+
+
+userRating.addEventListener(
+    'change',
+    () => {
+        const rating = userRating.value === ''
+            ? null
+            : Number(userRating.value);
+
+        saveMovieState({
+            rating: rating,
+        });
+    }
+);
+
 // ============================================================
 // INICIALIZAÇÃO
 // ============================================================
 
 showAuthPanel();
 showLoginForm();
+
+resetMovieState();
+setMovieControlsEnabled(false);
 
 fetchCurrentUser();
