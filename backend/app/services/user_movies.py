@@ -1,72 +1,80 @@
-from bson import ObjectId
-from app.database import user_movies_collection
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+from app.models.user_movie import UserMovie
 
 
-def get_movie_state(user_id: str, tmdb_id: str):
-    return user_movies_collection.find_one(
-        {
-            "user_id": ObjectId(user_id),
-            "tmdb_id": tmdb_id,
-        }
+def get_movie_state(
+    db: Session,
+    user_id: int,
+    tmdb_id: str,
+):
+    return db.scalar(
+        select(UserMovie).where(
+            UserMovie.user_id == user_id,
+            UserMovie.tmdb_id == tmdb_id,
+        )
     )
 
 
-def get_all_movie_states(user_id: str):
-    documents = user_movies_collection.find(
-        {"user_id": ObjectId(user_id)}
-    )
-
-    return [
-        {
-            "tmdb_id": document["tmdb_id"],
-            "favorite": document["favorite"],
-            "watched": document["watched"],
-            "rating": document.get("rating"),
-        }
-        for document in documents
-    ]
+def get_all_movie_states(
+    db: Session,
+    user_id: int,
+):
+    return db.scalars(
+        select(UserMovie).where(
+            UserMovie.user_id == user_id,
+        )
+    ).all()
 
 
 def update_movie_state(
-    user_id: str,
+    db: Session,
+    user_id: int,
     tmdb_id: str,
     updates: dict,
 ):
-    existing = get_movie_state(user_id, tmdb_id)
-
-    if existing is None:
-        document = {
-            "user_id": ObjectId(user_id),
-            "tmdb_id": tmdb_id,
-            "favorite": updates.get("favorite", False),
-            "watched": updates.get("watched", False),
-            "rating": updates.get("rating"),
-        }
-
-        user_movies_collection.insert_one(document)
-
-    else:
-        user_movies_collection.update_one(
-            {"_id": existing["_id"]},
-            {"$set": updates},
-        )
-
-    document = get_movie_state(user_id, tmdb_id)
-
-    return {
-        "tmdb_id": document["tmdb_id"],
-        "favorite": document["favorite"],
-        "watched": document["watched"],
-        "rating": document.get("rating"),
-    }
-
-
-def delete_movie_state(user_id: str, tmdb_id: str):
-    result = user_movies_collection.delete_one(
-        {
-            "user_id": ObjectId(user_id),
-            "tmdb_id": tmdb_id,
-        }
+    movie_state = get_movie_state(
+        db,
+        user_id,
+        tmdb_id,
     )
 
-    return result.deleted_count > 0
+    if movie_state is None:
+        movie_state = UserMovie(
+            user_id=user_id,
+            tmdb_id=tmdb_id,
+            favorite=updates.get("favorite", False),
+            watched=updates.get("watched", False),
+            rating=updates.get("rating"),
+        )
+
+        db.add(movie_state)
+
+    else:
+        for field, value in updates.items():
+            setattr(movie_state, field, value)
+
+    db.commit()
+    db.refresh(movie_state)
+
+    return movie_state
+
+
+def delete_movie_state(
+    db: Session,
+    user_id: int,
+    tmdb_id: str,
+):
+    movie_state = get_movie_state(
+        db,
+        user_id,
+        tmdb_id,
+    )
+
+    if movie_state is None:
+        return False
+
+    db.delete(movie_state)
+    db.commit()
+
+    return True

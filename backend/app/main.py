@@ -1,7 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.database import Base, engine
+from app.models import User, UserMovie
 from app.routers import movies, auth, user_movies
-from app.database import client
+
+
+Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI(
@@ -34,21 +38,6 @@ def health():
     return {
         "status": "ok"
     }
-
-@app.get("/health/db")
-def database_health():
-    try:
-        client.admin.command("ping")
-        return {
-            "status": "ok",
-            "database": "connected",
-        }
-    except Exception as exc:
-        return {
-            "status": "error",
-            "database": "unavailable",
-            "detail": str(exc),
-        }
 
 #@app.post("/test-db")
 #def test_database():

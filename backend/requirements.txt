@@ -3,7 +3,6 @@ uvicorn[standard]
 sqlalchemy
 pydantic-settings
 requests
-pymongo
 pwdlib[argon2]
 pyjwt
 python-multipart

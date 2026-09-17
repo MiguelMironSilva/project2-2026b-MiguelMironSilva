@@ -1,6 +1,5 @@
 from typing import Optional
-
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class MovieStateUpdate(BaseModel):
@@ -14,22 +13,9 @@ class MovieStateUpdate(BaseModel):
 
 
 class MovieStateResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     tmdb_id: str
     favorite: bool
     watched: bool
     rating: Optional[int] = None
-
-def get_all_movie_states(user_id: str):
-    documents = user_movies_collection.find(
-        {"user_id": ObjectId(user_id)}
-    )
-
-    return [
-        {
-            "tmdb_id": document["tmdb_id"],
-            "favorite": document["favorite"],
-            "watched": document["watched"],
-            "rating": document.get("rating"),
-        }
-        for document in documents
-    ]

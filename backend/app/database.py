@@ -1,34 +1,34 @@
-from pymongo import ASCENDING, MongoClient
-from pymongo.server_api import ServerApi
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy import event
 
-from app.config import settings
+DATABASE_URL = "sqlite:///./webapp_filmes.db"
 
-
-client = MongoClient(
-    settings.mongodb_uri,
-    server_api=ServerApi(
-        version="1",
-        strict=True,
-        deprecation_errors=True,
-    ),
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False},
 )
 
-db = client["webapp_filmes"]
+@event.listens_for(engine, "connect")
+def enable_sqlite_foreign_keys(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
-users_collection = db["users"]
-user_movies_collection = db["user_movies"]
-
-users_collection.create_index(
-    [("username", ASCENDING)],
-    unique=True,
+SessionLocal = sessionmaker(
+    bind=engine,
+    autoflush=False,
+    autocommit=False,
 )
 
-users_collection.create_index(
-    [("email", ASCENDING)],
-    unique=True,
-)
 
-user_movies_collection.create_index(
-    [("user_id", ASCENDING), ("tmdb_id", ASCENDING)],
-    unique=True,
-)
+class Base(DeclarativeBase):
+    pass
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

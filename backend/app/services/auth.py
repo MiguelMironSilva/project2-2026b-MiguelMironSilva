@@ -1,53 +1,73 @@
 from datetime import datetime, timedelta, timezone
 import jwt
-from pymongo.errors import DuplicateKeyError
 from pwdlib import PasswordHash
+from sqlalchemy import or_, select
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 from app.config import settings
-from app.database import users_collection
+from app.models.user import User
 
 
 password_hash = PasswordHash.recommended()
 
 
-def create_user(username: str, email: str, password: str) -> dict:
+def create_user(
+    db: Session,
+    username: str,
+    email: str,
+    password: str,
+) -> dict:
     username = username.strip()
     email = email.strip().lower()
 
-    document = {
-        "username": username,
-        "email": email,
-        "password_hash": password_hash.hash(password),
-        "created_at": datetime.now(timezone.utc),
-    }
+    user = User(
+        username=username,
+        email=email,
+        password_hash=password_hash.hash(password),
+        created_at=datetime.now(timezone.utc),
+    )
+
+    db.add(user)
 
     try:
-        result = users_collection.insert_one(document)
-    except DuplicateKeyError as exc:
-        raise ValueError("Nome de usuário ou e-mail já existe") from exc
+        db.commit()
+        db.refresh(user)
+    except IntegrityError as exc:
+        db.rollback()
+        raise ValueError(
+            "Nome de usuário ou e-mail já existe"
+        ) from exc
 
     return {
-        "id": str(result.inserted_id),
-        "username": username,
-        "email": email,
+        "id": str(user.id),
+        "username": user.username,
+        "email": user.email,
     }
 
 
-def authenticate_user(identifier: str, password: str):
+def authenticate_user(
+    db: Session,
+    identifier: str,
+    password: str,
+):
     identifier = identifier.strip()
 
-    user = users_collection.find_one(
-        {
-            "$or": [
-                {"username": identifier},
-                {"email": identifier.lower()},
-            ]
-        }
+    statement = select(User).where(
+        or_(
+            User.username == identifier,
+            User.email == identifier.lower(),
+        )
     )
+
+    user = db.scalar(statement)
 
     if user is None:
         return None
 
-    if not password_hash.verify(password, user["password_hash"]):
+    if not password_hash.verify(
+        password,
+        user.password_hash,
+    ):
         return None
 
     return user

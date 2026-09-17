@@ -1,6 +1,8 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 from app.auth import get_current_user
+from app.database import get_db
 from app.schemas.user_movies import (
     MovieStateResponse,
     MovieStateUpdate,
@@ -24,10 +26,12 @@ router = APIRouter(
     response_model=list[MovieStateResponse],
 )
 def get_my_movies(
-    current_user: Annotated[dict, Depends(get_current_user)],
+    current_user: Annotated[object, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     return get_all_movie_states(
-        str(current_user["_id"])
+        db,
+        current_user.id,
     )
 
 
@@ -37,14 +41,16 @@ def get_my_movies(
 )
 def get_my_movie_state(
     tmdb_id: str,
-    current_user: Annotated[dict, Depends(get_current_user)],
+    current_user: Annotated[object, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
 ):
-    document = get_movie_state(
-        str(current_user["_id"]),
+    movie_state = get_movie_state(
+        db,
+        current_user.id,
         tmdb_id,
     )
 
-    if document is None:
+    if movie_state is None:
         return {
             "tmdb_id": tmdb_id,
             "favorite": False,
@@ -52,12 +58,7 @@ def get_my_movie_state(
             "rating": None,
         }
 
-    return {
-        "tmdb_id": document["tmdb_id"],
-        "favorite": document["favorite"],
-        "watched": document["watched"],
-        "rating": document.get("rating"),
-    }
+    return movie_state
 
 
 @router.patch(
@@ -67,7 +68,8 @@ def get_my_movie_state(
 def update_my_movie_state(
     tmdb_id: str,
     update: MovieStateUpdate,
-    current_user: Annotated[dict, Depends(get_current_user)],
+    current_user: Annotated[object, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     if not update.model_fields_set:
         raise HTTPException(
@@ -81,9 +83,10 @@ def update_my_movie_state(
     }
 
     return update_movie_state(
-        user_id=str(current_user["_id"]),
-        tmdb_id=tmdb_id,
-        updates=updates,
+        db,
+        current_user.id,
+        tmdb_id,
+        updates,
     )
 
 
@@ -92,10 +95,12 @@ def update_my_movie_state(
 )
 def delete_my_movie_state(
     tmdb_id: str,
-    current_user: Annotated[dict, Depends(get_current_user)],
+    current_user: Annotated[object, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     deleted = delete_movie_state(
-        str(current_user["_id"]),
+        db,
+        current_user.id,
         tmdb_id,
     )
 

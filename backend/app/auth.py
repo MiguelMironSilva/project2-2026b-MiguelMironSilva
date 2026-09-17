@@ -1,11 +1,13 @@
 from typing import Annotated
 import jwt
-from bson import ObjectId
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 from app.config import settings
-from app.database import users_collection
+from app.database import get_db
+from app.models.user import User
 
 
 oauth2_scheme = OAuth2PasswordBearer(
@@ -15,6 +17,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 
 def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -35,12 +38,12 @@ def get_current_user(
             raise credentials_exception
 
         try:
-            user_object_id = ObjectId(user_id)
-        except (InvalidId, TypeError):
+            user_id = int(user_id)
+        except (TypeError, ValueError):
             raise credentials_exception
 
-        user = users_collection.find_one(
-            {"_id": user_object_id}
+        user = db.scalar(
+            select(User).where(User.id == user_id)
         )
 
         if user is None:
