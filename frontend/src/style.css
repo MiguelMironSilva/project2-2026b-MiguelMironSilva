@@ -22,21 +22,21 @@ THEME VARIABLES
 }
 
 .app.light-theme {
---body-bg-color: #ffffff;
---movie-search-bg-color: #ffffff;
---logo-color: #000000;
---primary-text-color: #cb2424;
---secondary-text-color: #000000;
---primary-border-color: #cc3434;
+    --body-bg-color: #f4fff9;
+    --movie-search-bg-color: #ffffff;
+    --logo-color: #123d2b;
+    --primary-text-color: #198754;
+    --secondary-text-color: #123d2b;
+    --primary-border-color: #198754;
 }
 
 .app.dark-theme {
---body-bg-color: #570909;
---movie-search-bg-color: #570606;
---logo-color: #ffffff;
---primary-text-color: #e63b46;
---secondary-text-color: #ffffff;
---primary-border-color: #eb3a49;
+    --body-bg-color: #082d1f;
+    --movie-search-bg-color: #0b3826;
+    --logo-color: #ffffff;
+    --primary-text-color: #35c98a;
+    --secondary-text-color: #ffffff;
+    --primary-border-color: #29a876;
 }
 
 /* ============================================================
