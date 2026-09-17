@@ -17,7 +17,7 @@ Poder salvar e favoritar filmes.
 Todos os dados de filmes salvos e favoritados são persistentes.
 Dados obtidos de uma API pública externa;
 Backend próprio;
-Persistência: base de dados NoSQL;
+Persistência: base de dados SQLite;
 Dar notas aos títulos;
 
 ## Parceria/cliente/usuário
