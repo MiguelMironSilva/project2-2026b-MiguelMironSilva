@@ -18,3 +18,18 @@ class MovieStateResponse(BaseModel):
     favorite: bool
     watched: bool
     rating: Optional[int] = None
+
+def get_all_movie_states(user_id: str):
+    documents = user_movies_collection.find(
+        {"user_id": ObjectId(user_id)}
+    )
+
+    return [
+        {
+            "tmdb_id": document["tmdb_id"],
+            "favorite": document["favorite"],
+            "watched": document["watched"],
+            "rating": document.get("rating"),
+        }
+        for document in documents
+    ]

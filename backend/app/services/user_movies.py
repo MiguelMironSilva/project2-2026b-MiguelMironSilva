@@ -3,7 +3,7 @@ from bson import ObjectId
 from app.database import user_movies_collection
 
 
-def get_movie_state(user_id: str, tmdb_id: int):
+def get_movie_state(user_id: str, tmdb_id: str):
     return user_movies_collection.find_one(
         {
             "user_id": ObjectId(user_id),
@@ -35,15 +35,15 @@ def upsert_movie_state(
     else:
         updates = {}
 
-        if favorite is not None:
-            updates["favorite"] = favorite
+        if "favorite" in update.model_fields_set:
+            updates["favorite"] = update.favorite
 
-        if watched is not None:
-            updates["watched"] = watched
+        if "watched" in update.model_fields_set:
+            updates["watched"] = update.watched
 
-        if rating is not None:
-            updates["rating"] = rating
-
+        if "rating" in update.model_fields_set:
+            updates["rating"] = update.rating
+        
         if updates:
             user_movies_collection.update_one(
                 {"_id": existing["_id"]},
@@ -60,7 +60,7 @@ def upsert_movie_state(
     }
 
 
-def delete_movie_state(user_id: str, tmdb_id: int):
+def delete_movie_state(user_id: str, tmdb_id: str):
     result = user_movies_collection.delete_one(
         {
             "user_id": ObjectId(user_id),

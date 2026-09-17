@@ -1,7 +1,5 @@
 from typing import Annotated
-
 from fastapi import APIRouter, Depends, HTTPException
-
 from app.auth import get_current_user
 from app.schemas.user_movies import (
     MovieStateResponse,
@@ -9,6 +7,12 @@ from app.schemas.user_movies import (
 )
 from app.services.user_movies import (
     delete_movie_state,
+    get_movie_state,
+    upsert_movie_state,
+)
+from app.services.user_movies import (
+    delete_movie_state,
+    get_all_movie_states,
     get_movie_state,
     upsert_movie_state,
 )
@@ -25,7 +29,7 @@ router = APIRouter(
     response_model=MovieStateResponse,
 )
 def get_my_movie_state(
-    tmdb_id: int,
+    tmdb_id: str,
     current_user: Annotated[dict, Depends(get_current_user)],
 ):
     document = get_movie_state(
@@ -81,7 +85,7 @@ def update_my_movie_state(
     "/{tmdb_id}",
 )
 def delete_my_movie_state(
-    tmdb_id: int,
+    tmdb_id: str,
     current_user: Annotated[dict, Depends(get_current_user)],
 ):
     deleted = delete_movie_state(
@@ -98,3 +102,14 @@ def delete_my_movie_state(
     return {
         "status": "ok",
     }
+
+@router.get(
+    "/",
+    response_model=list[MovieStateResponse],
+)
+def get_my_movies(
+    current_user: Annotated[dict, Depends(get_current_user)],
+):
+    return get_all_movie_states(
+        str(current_user["_id"])
+    )
