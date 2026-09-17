@@ -48,11 +48,41 @@ def update_movie_state(
             rating=updates.get("rating"),
         )
 
+        # Don't create an empty record.
+        if (
+            not movie_state.favorite
+            and not movie_state.watched
+            and movie_state.rating is None
+        ):
+            return {
+                "tmdb_id": tmdb_id,
+                "favorite": False,
+                "watched": False,
+                "rating": None,
+            }
+
         db.add(movie_state)
 
     else:
         for field, value in updates.items():
             setattr(movie_state, field, value)
+
+        # If the user has removed all personal state,
+        # remove the database row as well.
+        if (
+            not movie_state.favorite
+            and not movie_state.watched
+            and movie_state.rating is None
+        ):
+            db.delete(movie_state)
+            db.commit()
+
+            return {
+                "tmdb_id": tmdb_id,
+                "favorite": False,
+                "watched": False,
+                "rating": None,
+            }
 
     db.commit()
     db.refresh(movie_state)

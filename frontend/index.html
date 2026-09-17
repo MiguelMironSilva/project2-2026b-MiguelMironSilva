@@ -44,6 +44,11 @@
             <!-- Shown when logged in -->
             <div id="user-controls" style="display: none;">
                 <span id="username-display"></span>
+
+                <button id="my-movies-btn" type="button">
+                    Meus Filmes
+                </button>
+
                 <button id="logout-btn" type="button">
                     Logout
                 </button>
@@ -200,6 +205,67 @@
 </div>
 <!-- Input Section Ends Here -->
 
+<!-- My Movies Section Starts Here -->
+
+<section
+    id="my-movies-section"
+    class="my-movies-section"
+    style="display: none;"
+>
+    <div class="my-movies-header">
+        <h1>My Movies</h1>
+
+        <button
+            id="close-my-movies-btn"
+            type="button"
+        >
+            Pesquisar
+        </button>
+    </div>
+
+    <div class="my-movies-filters">
+
+        <button
+            id="filter-all-btn"
+            type="button"
+            class="active"
+        >
+            Todos
+        </button>
+
+        <button
+            id="filter-favorites-btn"
+            type="button"
+        >
+            Favoritados
+        </button>
+
+        <button
+            id="filter-watched-btn"
+            type="button"
+        >
+            Vistos
+        </button>
+
+    </div>
+
+    <div
+        id="my-movies-list"
+        class="my-movies-list"
+    >
+    </div>
+
+    <p
+        id="my-movies-empty"
+        class="my-movies-empty"
+        style="display: none;"
+    >
+        You have no saved movies yet.
+    </p>
+</section>
+
+<!-- My Movies Section Ends Here -->
+
 
 <!-- Movie Container Section Starts Here -->
 <main>
@@ -244,22 +310,22 @@
                             id="favorite-btn"
                             type="button"
                         >
-                            Favorite
+                            Favoritar
                         </button>
 
                         <button
                             id="watched-btn"
                             type="button"
                         >
-                            Watched
+                            Ver
                         </button>
 
                         <label for="user-rating">
-                            Your Rating:
+                            Sua Avaliacao:
                         </label>
 
                         <select id="user-rating">
-                            <option value="">No rating</option>
+                            <option value="">Sem Avaliacao</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>

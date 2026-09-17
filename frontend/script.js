@@ -64,6 +64,20 @@ let currentMovieState = {
     rating: null,
 };
 
+const myMoviesBtn = document.querySelector('#my-movies-btn');
+const closeMyMoviesBtn = document.querySelector('#close-my-movies-btn');
+
+const myMoviesSection = document.querySelector('#my-movies-section');
+const myMoviesList = document.querySelector('#my-movies-list');
+const myMoviesEmpty = document.querySelector('#my-movies-empty');
+
+const filterAllBtn = document.querySelector('#filter-all-btn');
+const filterFavoritesBtn = document.querySelector('#filter-favorites-btn');
+const filterWatchedBtn = document.querySelector('#filter-watched-btn');
+
+let myMovies = [];
+let currentMyMoviesFilter = 'all';
+
 // ============================================================
 // AUTENTICAÇÃO
 // ============================================================
@@ -133,6 +147,11 @@ const updateAuthenticationUI = (user) => {
 
         usernameDisplay.textContent = '';
 
+        myMovies = [];
+        hideMyMoviesSection();
+        clearMyMoviesList();
+        myMoviesEmpty.style.display = 'none';
+
         resetMovieState();
         setMovieControlsEnabled(false);
     }
@@ -186,10 +205,10 @@ const resetMovieState = () => {
         rating: null,
     };
 
-    favoriteBtn.textContent = 'Favorite';
+    favoriteBtn.textContent = 'Favoritar';
     favoriteBtn.setAttribute('aria-pressed', 'false');
 
-    watchedBtn.textContent = 'Watched';
+    watchedBtn.textContent = 'Visto';
     watchedBtn.setAttribute('aria-pressed', 'false');
 
     userRating.value = '';
@@ -198,8 +217,8 @@ const resetMovieState = () => {
 
 const updateMovieStateUI = () => {
     favoriteBtn.textContent = currentMovieState.favorite
-        ? 'Favorited ✓'
-        : 'Favorite';
+        ? 'Favoritado ✓'
+        : 'Favoritar';
 
     favoriteBtn.setAttribute(
         'aria-pressed',
@@ -207,8 +226,8 @@ const updateMovieStateUI = () => {
     );
 
     watchedBtn.textContent = currentMovieState.watched
-        ? 'Watched ✓'
-        : 'Watched';
+        ? 'Visto ✓'
+        : 'Ver';
 
     watchedBtn.setAttribute(
         'aria-pressed',
@@ -334,6 +353,224 @@ const saveMovieState = async (changes) => {
             'Failed to save movie state:',
             error
         );
+    }
+};
+
+const hideMovieDetails = () => {
+    movieContainer.style.display = 'none';
+};
+
+
+const showMyMoviesSection = () => {
+    myMoviesSection.style.display = 'block';
+    hideMovieDetails();
+
+    searchMovieListContainer.style.display = 'none';
+    clearSearchMovieListContainer();
+};
+
+
+const hideMyMoviesSection = () => {
+    myMoviesSection.style.display = 'none';
+};
+
+
+const setActiveMyMoviesFilter = (filter) => {
+    currentMyMoviesFilter = filter;
+
+    filterAllBtn.classList.toggle(
+        'active',
+        filter === 'all'
+    );
+
+    filterFavoritesBtn.classList.toggle(
+        'active',
+        filter === 'favorites'
+    );
+
+    filterWatchedBtn.classList.toggle(
+        'active',
+        filter === 'watched'
+    );
+};
+
+
+const getFilteredMyMovies = () => {
+    switch (currentMyMoviesFilter) {
+        case 'favorites':
+            return myMovies.filter(
+                movie => movie.favorite
+            );
+
+        case 'watched':
+            return myMovies.filter(
+                movie => movie.watched
+            );
+
+        default:
+            return myMovies;
+    }
+};
+
+
+const clearMyMoviesList = () => {
+    myMoviesList.innerHTML = '';
+};
+
+
+const createMyMovieCard = (movie, state) => {
+    const card = document.createElement('div');
+    const image = document.createElement('img');
+    const title = document.createElement('h2');
+    const status = document.createElement('p');
+
+    card.classList.add('my-movie-card');
+
+    image.src = movie.poster_path !== null
+        ? `${IMAGE_BASE_URL}${movie.poster_path}`
+        : './images/gray background.jpg';
+
+    image.alt = `${movie.title} Poster`;
+
+    title.textContent = movie.title;
+
+    const statusParts = [];
+
+    if (state.favorite) {
+        statusParts.push('Favorite');
+    }
+
+    if (state.watched) {
+        statusParts.push('Watched');
+    }
+
+    if (state.rating !== null) {
+        statusParts.push(`Your rating: ${state.rating}/10`);
+    }
+
+    status.textContent = statusParts.length > 0
+        ? statusParts.join(' · ')
+        : 'No personal status';
+
+    card.append(
+        image,
+        title,
+        status
+    );
+
+    card.addEventListener(
+        'click',
+        showMovieDetails({
+            id: movie.id,
+        })
+    );
+
+    return card;
+};
+
+
+const renderMyMovies = async () => {
+    clearMyMoviesList();
+
+    const filteredMovies = getFilteredMyMovies();
+
+    if (filteredMovies.length === 0) {
+        myMoviesEmpty.style.display = 'block';
+        return;
+    }
+
+    myMoviesEmpty.style.display = 'none';
+
+    const movieCards = await Promise.all(
+        filteredMovies.map(async state => {
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/movies/${state.tmdb_id}`
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Backend returned ${response.status}`
+                    );
+                }
+
+                const movie = await response.json();
+
+                return createMyMovieCard(
+                    movie,
+                    state
+                );
+
+            } catch (error) {
+                console.error(
+                    `Failed to fetch movie ${state.tmdb_id}:`,
+                    error
+                );
+
+                return null;
+            }
+        })
+    );
+
+    movieCards.forEach(card => {
+        if (card !== null) {
+            myMoviesList.appendChild(card);
+        }
+    });
+
+    if (myMoviesList.children.length === 0) {
+        myMoviesEmpty.textContent =
+            'Unable to load your saved movies.';
+
+        myMoviesEmpty.style.display = 'block';
+    }
+};
+
+
+const loadMyMovies = async () => {
+    const token = getToken();
+
+    if (!token) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/my-movies/`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (response.status === 401) {
+            removeToken();
+            updateAuthenticationUI(null);
+            hideMyMoviesSection();
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                `Backend returned ${response.status}`
+            );
+        }
+
+        myMovies = await response.json();
+
+        await renderMyMovies();
+
+    } catch (error) {
+        console.error(
+            'Failed to fetch My Movies:',
+            error
+        );
+
+        clearMyMoviesList();
+        myMoviesEmpty.textContent =
+            'Failed to load your movies.';
+        myMoviesEmpty.style.display = 'block';
     }
 };
 
@@ -545,10 +782,11 @@ try {
 
 const showMovieDetails = (movieObj) => {
 return async () => {
-try {
-const response = await fetch(
-`${API_BASE_URL}/movies/${movieObj.id}`
-);
+    hideMyMoviesSection();
+    try {
+    const response = await fetch(
+    `${API_BASE_URL}/movies/${movieObj.id}`
+    );
 
 
         if (!response.ok) {
@@ -893,6 +1131,52 @@ userRating.addEventListener(
         saveMovieState({
             rating: rating,
         });
+    }
+);
+
+myMoviesBtn.addEventListener(
+    'click',
+    async () => {
+        setActiveMyMoviesFilter('all');
+        showMyMoviesSection();
+        await loadMyMovies();
+    }
+);
+
+
+closeMyMoviesBtn.addEventListener(
+    'click',
+    () => {
+        hideMyMoviesSection();
+        myMoviesEmpty.style.display = 'none';
+        clearMyMoviesList();
+    }
+);
+
+
+filterAllBtn.addEventListener(
+    'click',
+    async () => {
+        setActiveMyMoviesFilter('all');
+        await renderMyMovies();
+    }
+);
+
+
+filterFavoritesBtn.addEventListener(
+    'click',
+    async () => {
+        setActiveMyMoviesFilter('favorites');
+        await renderMyMovies();
+    }
+);
+
+
+filterWatchedBtn.addEventListener(
+    'click',
+    async () => {
+        setActiveMyMoviesFilter('watched');
+        await renderMyMovies();
     }
 );
 

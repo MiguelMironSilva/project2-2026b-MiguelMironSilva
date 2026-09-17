@@ -1,9 +1,17 @@
-/* Resetting CSS Global Rules */
+/* ============================================================
+   RESET
+   ============================================================ */
+
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
+
+
+/* ============================================================
+   THEME VARIABLES
+   ============================================================ */
 
 :root {
     --body-bg-color: #fff;
@@ -14,13 +22,20 @@
     --primary-border-color: #d9008d;
 }
 
-/* Body Starts Here */
+
+/* ============================================================
+   BODY
+   ============================================================ */
+
 body {
     background-color: var(--body-bg-color);
 }
-/* Body Ends Here */
 
-/* Header Section Starts Here */
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
 header {
     position: relative;
 }
@@ -43,6 +58,16 @@ header {
     color: var(--logo-color);
 }
 
+.header-controls {
+    position: absolute;
+    top: 22px;
+    right: 20px;
+
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+}
+
 .theme-mode-btns {
     width: fit-content;
 }
@@ -57,28 +82,168 @@ header {
     color: rgb(214, 7, 142);
     border: 2px solid #fff;
     border-radius: 18px;
-    padding: 0px 3px;
+    padding: 0 3px;
 }
-/* Header Section Ends Here */
 
-/* Input Section Starts Here */
+
+/* ============================================================
+   ACCOUNT CONTROLS
+   ============================================================ */
+
+.account-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.account-controls button,
+.auth-panel button {
+    padding: 8px 14px;
+
+    border: 2px solid var(--primary-border-color);
+    border-radius: 6px;
+
+    background-color: transparent;
+    color: var(--primary-text-color);
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+
+    cursor: pointer;
+}
+
+.account-controls button:hover,
+.auth-panel button:hover {
+    opacity: 0.8;
+}
+
+#user-controls {
+    align-items: center;
+    gap: 10px;
+}
+
+#username-display {
+    color: var(--secondary-text-color);
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+
+/* ============================================================
+   AUTHENTICATION PANEL
+   ============================================================ */
+
+.auth-panel {
+    width: min(400px, calc(100% - 30px));
+
+    margin: 20px auto;
+    padding: 20px;
+
+    border: 2px solid var(--primary-border-color);
+    border-radius: 10px;
+
+    background-color: var(--movie-search-bg-color);
+    color: var(--secondary-text-color);
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.auth-panel-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.auth-tabs button {
+    flex: 1;
+}
+
+.auth-tabs button.active {
+    background-color: var(--primary-text-color);
+    color: #fff;
+}
+
+.auth-panel form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.auth-field label {
+    font-weight: bold;
+    color: var(--secondary-text-color);
+}
+
+.auth-field input {
+    padding: 10px;
+
+    border: 1px solid var(--primary-border-color);
+    outline-color: var(--primary-border-color);
+
+    background-color: var(--movie-search-bg-color);
+    color: var(--secondary-text-color);
+
+    font-size: 1rem;
+}
+
+.auth-field input::placeholder {
+    color: var(--secondary-text-color);
+    opacity: 0.7;
+}
+
+.auth-message {
+    min-height: 20px;
+    margin: 0;
+
+    font-size: 0.95rem;
+}
+
+
+/* ============================================================
+   MOVIE SEARCH
+   ============================================================ */
+
 .input-field {
     display: flex;
     flex-direction: column;
     align-items: center;
+
     margin: 30px 0;
     position: relative;
 }
 
 .input-field input {
-    padding: 10px 5px;
-    font-size: 1.1rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     width: 400px;
+    padding: 10px 5px;
+
     background-color: var(--movie-search-bg-color);
+    color: var(--secondary-text-color);
+
     border: 1px solid;
     outline-color: rgb(217, 0, 141);
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.1rem;
+
     transition: all .8s ease-out;
+}
+
+.input-field input::placeholder {
+    color: var(--secondary-text-color);
+    opacity: 0.7;
 }
 
 .input-field input:focus-within {
@@ -86,23 +251,30 @@ header {
 }
 
 .input-field .search-movie-list-container {
-    background-color: rgb(219, 157, 197);
-    max-height: 399px;
-    width: 490px;
-    padding: 3px 2px;
-    border-radius: 0 0 6px 6px;
     display: none;
-    overflow: hidden;
+
     position: absolute;
     top: 48px;
+
+    width: 490px;
+    max-height: 399px;
+    padding: 3px 2px;
+
+    overflow: hidden;
+
+    background-color: rgb(219, 157, 197);
+    border-radius: 0 0 6px 6px;
 }
 
 .input-field .search-movie-list-container p {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 1rem;
     margin: 3px;
     padding: 2px;
+
     background-color: rgb(235, 58, 176);
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+
     cursor: pointer;
     transition: all .2s;
 }
@@ -110,14 +282,26 @@ header {
 .input-field .search-movie-list-container p:hover {
     background-color: rgb(233, 100, 189);
 }
-/* Input Section Ends Here */
 
-/* Movie Container Starts Here */
+
+/* ============================================================
+   MOVIE DETAILS
+   ============================================================ */
+
 .movie-container {
     display: none;
+
     padding: 40px 70px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
     color: var(--secondary-text-color);
+
+    font-family:
+        'Trebuchet MS',
+        'Lucida Sans Unicode',
+        'Lucida Grande',
+        'Lucida Sans',
+        Arial,
+        sans-serif;
 }
 
 .movie-container .movie-details-container {
@@ -131,16 +315,19 @@ header {
 
 .movie-details-container .movie-image img {
     height: 600px;
-    border-radius: 10px;
+
     border: 2px solid var(--primary-border-color);
+    border-radius: 10px;
 }
 
 .movie-details-container .movie-details .movie-heading {
     display: flex;
     align-items: center;
     column-gap: 6px;
-    font-size: 2rem;
+
     color: var(--primary-text-color);
+
+    font-size: 2rem;
 }
 
 .movie-details-container .movie-details .movie-original-name,
@@ -152,8 +339,10 @@ header {
 .movie-details-container .movie-details .genres {
     display: flex;
     column-gap: 10px;
-    font-size: 1.2rem;
+
     margin: 20px 0;
+
+    font-size: 1.2rem;
 }
 
 .movie-details-container .movie-details .genres .genres-list {
@@ -172,9 +361,15 @@ header {
 
 .movie-details-container .movie-details .description {
     margin: 20px 0;
+
     font-size: 1.1rem;
     text-align: justify;
 }
+
+
+/* ============================================================
+   CAST
+   ============================================================ */
 
 .movie-container .cast-details-container {
     display: none;
@@ -182,17 +377,19 @@ header {
 }
 
 .movie-container .cast-details-container h1 {
-    font-size: 2.5rem;
     color: var(--primary-text-color);
+    font-size: 2.5rem;
 }
 
 .cast-details-container .cast-details {
     display: grid;
+
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    grid-template-rows: repeat(5, auto);
+
     column-gap: 50px;
     row-gap: 30px;
-    margin: 20px 0 10px 0;
+
+    margin: 20px 0 10px;
 }
 
 .cast-details-container .cast-details .cast {
@@ -201,35 +398,43 @@ header {
 
 .cast-details-container .cast-details .cast img {
     height: 300px;
-    border-radius: 10px;
+
     border: 2px solid var(--primary-border-color);
+    border-radius: 10px;
 }
 
 .cast-details-container .cast-details .cast p {
     text-align: center;
     font-size: 1.1rem;
 }
-/* Movie Container Ends Here */
 
-/* User Movie Controls */
+
+/* ============================================================
+   USER MOVIE CONTROLS
+   ============================================================ */
 
 .user-movie-controls {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
+
     margin-top: 30px;
 }
 
 .user-movie-controls button,
 .user-movie-controls select {
     padding: 10px 14px;
+
     border: 2px solid var(--primary-border-color);
     border-radius: 6px;
+
     background-color: transparent;
     color: var(--secondary-text-color);
+
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 1rem;
+
     cursor: pointer;
 }
 
@@ -260,137 +465,17 @@ header {
     color: var(--secondary-text-color);
 }
 
-/* User Movie Controls Ends Here */
 
-/* Account Section Starts Here */
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
 
-.header-controls {
-    position: absolute;
-    top: 22px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    column-gap: 15px;
-}
+/* ------------------------------------------------------------
+   Tablets / Small Laptops
+   ------------------------------------------------------------ */
 
-.account-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+@media screen and (max-width: 1024px) {
 
-.account-controls button,
-.auth-panel button {
-    padding: 8px 14px;
-    border: 2px solid var(--primary-border-color);
-    border-radius: 6px;
-    background-color: transparent;
-    color: var(--primary-text-color);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.account-controls button:hover,
-.auth-panel button:hover {
-    opacity: 0.8;
-}
-
-#user-controls {
-    align-items: center;
-    gap: 10px;
-}
-
-#username-display {
-    color: var(--secondary-text-color);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: bold;
-}
-
-.user-movie-controls {
-    justify-content: center;
-}
-
-.user-movie-controls button,
-.user-movie-controls select {
-    font-size: 0.9rem;
-    padding: 8px 10px;
-}
-
-/* Authentication Panel */
-
-.auth-panel {
-    width: 400px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 2px solid var(--primary-border-color);
-    border-radius: 10px;
-    background-color: var(--movie-search-bg-color);
-    color: var(--secondary-text-color);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.auth-panel-content {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.auth-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.auth-tabs button {
-    flex: 1;
-}
-
-.auth-tabs button.active {
-    background-color: var(--primary-text-color);
-    color: white;
-}
-
-.auth-panel form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.auth-field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.auth-field label {
-    font-weight: bold;
-    color: var(--secondary-text-color);
-}
-
-.auth-field input {
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid var(--primary-border-color);
-    outline-color: var(--primary-border-color);
-    background-color: var(--movie-search-bg-color);
-    color: var(--secondary-text-color);
-}
-
-.auth-message {
-    min-height: 20px;
-    margin: 0;
-    font-size: 0.95rem;
-}
-
-
-/* Account Section Ends Here */
-
-
-/* Responsive Design - Media Query */
-
-@media screen and (max-width:1024px) {
-    /* Movie Container Starts Here */
     .movie-details-container .movie-image img {
         height: 450px;
     }
@@ -412,7 +497,7 @@ header {
     .movie-container .cast-details-container h1 {
         font-size: 2.3rem;
     }
-    
+
     .cast-details-container .cast-details {
         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     }
@@ -420,11 +505,17 @@ header {
     .cast-details-container .cast-details .cast img {
         height: 220px;
     }
-    /* Movie Container Ends Here */
 }
 
-@media screen and (max-width:768px) {
-    /* Header Section Starts Here */
+
+/* ------------------------------------------------------------
+   Tablets / Phones
+   ------------------------------------------------------------ */
+
+@media screen and (max-width: 768px) {
+
+    /* Header */
+
     header .logo img {
         height: 50px;
     }
@@ -436,9 +527,10 @@ header {
     header .theme-mode-btns i {
         font-size: 1.8rem;
     }
-    /* Header Section Ends Here */
 
-    /* Movie Container Starts Here */
+
+    /* Movie Details */
+
     .movie-details-container {
         flex-direction: column;
     }
@@ -448,8 +540,10 @@ header {
     }
 
     .movie-details-container .movie-image img {
-        height: 500px;
         width: 100%;
+        max-width: 500px;
+        height: 500px;
+        object-fit: contain;
     }
 
     .movie-details-container .movie-details {
@@ -479,16 +573,20 @@ header {
     .cast-details-container .cast-details .cast p {
         font-size: .9rem;
     }
-    /* Movie Container Ends Here */
 }
 
-@media screen and (max-width:576px) {
 
-    /* Header Section Starts Here */
+/* ------------------------------------------------------------
+   Phones
+   ------------------------------------------------------------ */
+
+@media screen and (max-width: 576px) {
+
+    /* Header */
 
     header .logo {
         justify-content: flex-start;
-        padding: 15px 15px;
+        padding: 15px;
     }
 
     header .logo img {
@@ -519,10 +617,8 @@ header {
         font-size: 0.9rem;
     }
 
-    /* Header Section Ends Here */
 
-
-    /* Input Section Starts Here */
+    /* Movie Search */
 
     .input-field input {
         width: 280px;
@@ -536,18 +632,18 @@ header {
         width: 325px;
     }
 
-    /* Input Section Ends Here */
 
-
-    /* Movie Container Starts Here */
+    /* Movie Details */
 
     .movie-container {
-        padding: 10px 10px;
+        padding: 10px;
     }
 
     .movie-details-container .movie-image img {
+        width: 100%;
+        max-width: 400px;
         height: 400px;
-        width: 400px;
+        object-fit: contain;
     }
 
     .movie-details-container .movie-details .movie-heading {
@@ -579,21 +675,29 @@ header {
         font-size: 0.8rem;
     }
 
+
+    /* User Movie Controls */
+
     .user-movie-controls {
         justify-content: center;
     }
 
     .user-movie-controls button,
     .user-movie-controls select {
-        font-size: 0.9rem;
         padding: 8px 10px;
+        font-size: 0.9rem;
     }
-
-    /* Movie Container Ends Here */
 }
 
-@media screen and (max-width:369px) {
-    /* Input Section Starts Here */
+
+/* ------------------------------------------------------------
+   Small Phones
+   ------------------------------------------------------------ */
+
+@media screen and (max-width: 369px) {
+
+    /* Movie Search */
+
     .input-field input {
         width: 200px;
         font-size: 1rem;
@@ -608,40 +712,39 @@ header {
     }
 
     .input-field .search-movie-list-container p {
-        font-size: .8rem;
+        font-size: 0.8rem;
     }
-    /* Input Section Ends Here */
 
-    /* Movie Container Starts Here */
+
+    /* Movie Details */
+
     .movie-details-container .movie-image img {
         width: 250px;
+        height: 300px;
     }
 
     .movie-details-container .movie-details .movie-heading {
         font-size: 1rem;
-    }    
+    }
 
     .movie-details-container .movie-details .movie-original-name,
     .movie-details-container .movie-details .movie-original-name span,
     .movie-details-container .movie-details .genres,
     .movie-details-container .movie-details .ratings,
     .movie-details-container .movie-details .description {
-        font-size: .8rem;
+        font-size: 0.8rem;
     }
+
+
+    /* Cast */
 
     .cast-details-container .cast-details {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
-
-    .cast-details-container .cast-details {
         place-items: center;
     }
 
     .cast-details-container .cast-details .cast img {
-        height: 300px;
         width: 220px;
+        height: 300px;
     }
-    /* Movie Container Ends Here */
 }
-
-/* Responsive Design - Media Query */
