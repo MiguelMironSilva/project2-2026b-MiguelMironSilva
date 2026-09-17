@@ -44,9 +44,6 @@ header {
 }
 
 .theme-mode-btns {
-    position: absolute;
-    top: 22px;
-    right: 20px;
     width: fit-content;
 }
 
@@ -333,6 +330,118 @@ header {
         font-size: 1.2rem;
     }
     /* Header Section Ends Here */
+
+    /* Account Section Starts Here */
+
+.header-controls {
+    position: absolute;
+    top: 22px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+}
+
+.account-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.account-controls button,
+.auth-panel button {
+    padding: 8px 14px;
+    border: 2px solid var(--primary-border-color);
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--primary-text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.account-controls button:hover,
+.auth-panel button:hover {
+    opacity: 0.8;
+}
+
+#user-controls {
+    align-items: center;
+    gap: 10px;
+}
+
+#username-display {
+    color: var(--secondary-text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+
+/* Authentication Panel */
+
+.auth-panel {
+    width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid var(--primary-border-color);
+    border-radius: 10px;
+    background-color: var(--movie-input-bg-color);
+    color: var(--secondary-text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.auth-panel-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.auth-tabs button {
+    flex: 1;
+}
+
+.auth-tabs button.active {
+    background-color: var(--primary-text-color);
+    color: white;
+}
+
+.auth-panel form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.auth-field label {
+    font-weight: bold;
+}
+
+.auth-field input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid var(--primary-border-color);
+    outline-color: var(--primary-border-color);
+}
+
+.auth-message {
+    min-height: 20px;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+
+/* Account Section Ends Here */
 
     /* Input Section Starts Here */
     .input-field input {
