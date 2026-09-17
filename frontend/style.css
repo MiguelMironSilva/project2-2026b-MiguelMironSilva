@@ -7,7 +7,7 @@
 
 :root {
     --body-bg-color: #fff;
-    --movie-input-bg-color: #fff;
+    --movie-search-bg-color: #fff;
     --logo-color: #000;
     --primary-text-color: #d6078e;
     --secondary-text-color: #000;
@@ -75,7 +75,7 @@ header {
     font-size: 1.1rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     width: 400px;
-    background-color: var(--movie-input-bg-color);
+    background-color: var(--movie-search-bg-color);
     border: 1px solid;
     outline-color: rgb(217, 0, 141);
     transition: all .8s ease-out;
@@ -210,6 +210,56 @@ header {
     font-size: 1.1rem;
 }
 /* Movie Container Ends Here */
+
+/* User Movie Controls */
+
+.user-movie-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.user-movie-controls button,
+.user-movie-controls select {
+    padding: 10px 14px;
+    border: 2px solid var(--primary-border-color);
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--secondary-text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.user-movie-controls button:hover,
+.user-movie-controls select:hover {
+    border-color: var(--primary-text-color);
+}
+
+.user-movie-controls button[aria-pressed="true"] {
+    background-color: var(--primary-text-color);
+    color: #fff;
+}
+
+.user-movie-controls button:disabled,
+.user-movie-controls select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.user-movie-controls label {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+}
+
+.user-movie-controls select option {
+    background-color: var(--movie-input-bg-color);
+    color: var(--secondary-text-color);
+}
+
+/* User Movie Controls Ends Here */
 
 
 /* Responsive Design - Media Query */
@@ -376,6 +426,15 @@ header {
     font-weight: bold;
 }
 
+.user-movie-controls {
+    justify-content: center;
+}
+
+.user-movie-controls button,
+.user-movie-controls select {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+}
 
 /* Authentication Panel */
 
@@ -385,7 +444,7 @@ header {
     padding: 20px;
     border: 2px solid var(--primary-border-color);
     border-radius: 10px;
-    background-color: var(--movie-input-bg-color);
+    background-color: var(--movie-search-bg-color);
     color: var(--secondary-text-color);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -425,6 +484,7 @@ header {
 
 .auth-field label {
     font-weight: bold;
+    color: var(--secondary-text-color);
 }
 
 .auth-field input {
@@ -432,6 +492,8 @@ header {
     font-size: 1rem;
     border: 1px solid var(--primary-border-color);
     outline-color: var(--primary-border-color);
+    background-color: var(--movie-input-bg-color);
+    color: var(--secondary-text-color);
 }
 
 .auth-message {

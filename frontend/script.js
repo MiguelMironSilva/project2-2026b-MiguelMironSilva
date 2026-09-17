@@ -198,7 +198,7 @@ const resetMovieState = () => {
 
 const updateMovieStateUI = () => {
     favoriteBtn.textContent = currentMovieState.favorite
-        ? 'Favorited'
+        ? 'Favorited ✓'
         : 'Favorite';
 
     favoriteBtn.setAttribute(
@@ -624,6 +624,10 @@ const response = await fetch(
         }
 
         await addCastToCastDetailsContainer(movie.id);
+
+        currentMovieId = String(movie.id);
+
+        await loadMovieState(currentMovieId);
 
         movieContainer.style.display = "block";
         searchMovieListContainer.style.display = "none";
