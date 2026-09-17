@@ -4,6 +4,9 @@
 
 ## Acesso
 
+- Render: https://project2-2026b-miguelmironsilva.onrender.com/
+- Netlify: 
+
 ## Desenvolvedor(a)
 - Miguel Miron Silva
 - Ciência da Computação, Universidade Federal de Santa Maria
