@@ -1,5 +1,4 @@
 from bson import ObjectId
-
 from app.database import user_movies_collection
 
 
@@ -10,6 +9,22 @@ def get_movie_state(user_id: str, tmdb_id: str):
             "tmdb_id": tmdb_id,
         }
     )
+
+
+def get_all_movie_states(user_id: str):
+    documents = user_movies_collection.find(
+        {"user_id": ObjectId(user_id)}
+    )
+
+    return [
+        {
+            "tmdb_id": document["tmdb_id"],
+            "favorite": document["favorite"],
+            "watched": document["watched"],
+            "rating": document.get("rating"),
+        }
+        for document in documents
+    ]
 
 
 def upsert_movie_state(
@@ -35,15 +50,15 @@ def upsert_movie_state(
     else:
         updates = {}
 
-        if "favorite" in update.model_fields_set:
-            updates["favorite"] = update.favorite
+        if favorite is not None:
+            updates["favorite"] = favorite
 
-        if "watched" in update.model_fields_set:
-            updates["watched"] = update.watched
+        if watched is not None:
+            updates["watched"] = watched
 
-        if "rating" in update.model_fields_set:
-            updates["rating"] = update.rating
-        
+        if rating is not None:
+            updates["rating"] = rating
+
         if updates:
             user_movies_collection.update_one(
                 {"_id": existing["_id"]},
