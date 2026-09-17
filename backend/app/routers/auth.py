@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from app.schemas.auth import (
     LoginRequest,
     TokenResponse,
@@ -11,7 +11,7 @@ from app.services.auth import (
     create_user,
 )
 from typing import Annotated
-from fastapi import Depends
+from fastapi.security import OAuth2PasswordRequestForm
 from app.auth import get_current_user
 
 
@@ -44,9 +44,14 @@ def register(user: UserCreate):
     "/login",
     response_model=TokenResponse,
 )
-def login(credentials: LoginRequest):
+def login(
+    credentials: Annotated[
+        OAuth2PasswordRequestForm,
+        Depends(),
+    ],
+):
     user = authenticate_user(
-        identifier=credentials.identifier,
+        identifier=credentials.username,
         password=credentials.password,
     )
 
@@ -54,6 +59,7 @@ def login(credentials: LoginRequest):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Nome de usuário ou e-mail inválido",
+            headers={"WWW-Authenticate": "Bearer"},
         )
 
     token = create_access_token(str(user["_id"]))

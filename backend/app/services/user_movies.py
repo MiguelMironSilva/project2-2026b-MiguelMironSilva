@@ -27,12 +27,10 @@ def get_all_movie_states(user_id: str):
     ]
 
 
-def upsert_movie_state(
+def update_movie_state(
     user_id: str,
     tmdb_id: str,
-    favorite: bool | None = None,
-    watched: bool | None = None,
-    rating: int | None = None,
+    updates: dict,
 ):
     existing = get_movie_state(user_id, tmdb_id)
 
@@ -40,30 +38,18 @@ def upsert_movie_state(
         document = {
             "user_id": ObjectId(user_id),
             "tmdb_id": tmdb_id,
-            "favorite": favorite if favorite is not None else False,
-            "watched": watched if watched is not None else False,
-            "rating": rating,
+            "favorite": updates.get("favorite", False),
+            "watched": updates.get("watched", False),
+            "rating": updates.get("rating"),
         }
 
         user_movies_collection.insert_one(document)
 
     else:
-        updates = {}
-
-        if favorite is not None:
-            updates["favorite"] = favorite
-
-        if watched is not None:
-            updates["watched"] = watched
-
-        if rating is not None:
-            updates["rating"] = rating
-
-        if updates:
-            user_movies_collection.update_one(
-                {"_id": existing["_id"]},
-                {"$set": updates},
-            )
+        user_movies_collection.update_one(
+            {"_id": existing["_id"]},
+            {"$set": updates},
+        )
 
     document = get_movie_state(user_id, tmdb_id)
 

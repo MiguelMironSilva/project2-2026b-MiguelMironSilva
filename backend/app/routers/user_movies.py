@@ -7,14 +7,9 @@ from app.schemas.user_movies import (
 )
 from app.services.user_movies import (
     delete_movie_state,
-    get_movie_state,
-    upsert_movie_state,
-)
-from app.services.user_movies import (
-    delete_movie_state,
     get_all_movie_states,
     get_movie_state,
-    upsert_movie_state,
+    update_movie_state,
 )
 
 
@@ -22,6 +17,18 @@ router = APIRouter(
     prefix="/api/my-movies",
     tags=["my-movies"],
 )
+
+
+@router.get(
+    "/",
+    response_model=list[MovieStateResponse],
+)
+def get_my_movies(
+    current_user: Annotated[dict, Depends(get_current_user)],
+):
+    return get_all_movie_states(
+        str(current_user["_id"])
+    )
 
 
 @router.get(
@@ -62,22 +69,21 @@ def update_my_movie_state(
     update: MovieStateUpdate,
     current_user: Annotated[dict, Depends(get_current_user)],
 ):
-    if (
-        update.favorite is None
-        and update.watched is None
-        and update.rating is None
-    ):
+    if not update.model_fields_set:
         raise HTTPException(
             status_code=400,
-            detail="Por favor, digite algo",
+            detail="Nenhum campo foi fornecido",
         )
 
-    return upsert_movie_state(
+    updates = {
+        field: getattr(update, field)
+        for field in update.model_fields_set
+    }
+
+    return update_movie_state(
         user_id=str(current_user["_id"]),
         tmdb_id=tmdb_id,
-        favorite=update.favorite,
-        watched=update.watched,
-        rating=update.rating,
+        updates=updates,
     )
 
 
@@ -102,14 +108,3 @@ def delete_my_movie_state(
     return {
         "status": "ok",
     }
-
-@router.get(
-    "/",
-    response_model=list[MovieStateResponse],
-)
-def get_my_movies(
-    current_user: Annotated[dict, Depends(get_current_user)],
-):
-    return get_all_movie_states(
-        str(current_user["_id"])
-    )
